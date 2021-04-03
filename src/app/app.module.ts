@@ -16,8 +16,13 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatBottomSheetModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatDialogModule,
+    CommonModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
