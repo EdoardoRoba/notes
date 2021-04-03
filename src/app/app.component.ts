@@ -2,21 +2,20 @@ import { Component, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'retrievedData',
-  templateUrl: './retrievedData.html'
+  selector: 'dialog',
+  templateUrl: 'dialog.html',
 })
-export class DialogContent {
-  
-  constructor(@Inject(MAT_DIALOG_DATA) public outGet: any){}
-
+export class DialogDataExampleDialog {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
   ngOnInit() {
-    // will log the entire data object
-    console.log('provaaaa',this.outGet)
+    console.log('dialog:',this.data)
   }
-
+  toPrint(){
+    return this.data
+  }
 }
 
 @Component({
@@ -34,6 +33,7 @@ export class AppComponent {
   retrievedData: any;
   durationInSeconds = 5;
   valid = false;
+  outGet = false;
   panelOpenState1 = false;
   panelOpenState2 = false;
   panelOpenState3 = false;
@@ -42,10 +42,6 @@ export class AppComponent {
   constructor(private http: HttpClient,private store: AngularFirestore,private _snackBar: MatSnackBar,public dialog: MatDialog){}
   
   ngOnInit() {}
-
-  delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-  }
 
   onPost() {
     // Send Http request
@@ -67,12 +63,11 @@ export class AppComponent {
   onGet(){
     let obj = this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
       // this.retrievedData = responseData;
-      this.dialog.open(DialogContent, {
-        data : responseData
+      console.log("data",responseData)
+      this.dialog.open(DialogDataExampleDialog, {
+        data: responseData
       });
-      // console.log("ciaoooo",responseData)
-  });
-    
+    });
     // const dialogRef = this.dialog.open(DialogContent, {
     //   data : {obj}
     // });
