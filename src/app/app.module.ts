@@ -11,22 +11,27 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatNativeDateModule} from '@angular/material/core';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule}  from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { GetOutputComponent } from './get-output/get-output.component';
+import { HomeComponent } from './home/home.component';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GetOutputComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +54,8 @@ import { CommonModule } from '@angular/common';
     MatSnackBarModule,
     MatTooltipModule,
     MatDialogModule,
-    CommonModule
+    CommonModule,
+    HttpClientInMemoryWebApiModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
