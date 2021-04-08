@@ -27,6 +27,8 @@ import { GetOutputComponent } from './get-output/get-output.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { DialogComponent } from './dialog/dialog.component';
     MatTooltipModule,
     MatDialogModule,
     CommonModule,
-    HttpClientInMemoryWebApiModule
+    HttpClientInMemoryWebApiModule,
+    MatListModule,
+    MatTableModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]

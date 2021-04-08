@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
     this.title = '';
     this.content = '';
     this.expDate = '';
+    this.category = '';
   }
 
   openDialog() {
