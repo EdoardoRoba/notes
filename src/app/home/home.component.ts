@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +24,7 @@ export class HomeComponent implements OnInit {
   panelOpenState3 = false;
   notes = this.store.collection('notes').valueChanges({note:'note'});
 
-  constructor(private http: HttpClient,private store: AngularFirestore,private _snackBar: MatSnackBar,public dialog: MatDialog){}
+  constructor(private http: HttpClient,private store: AngularFirestore,private _snackBar: MatSnackBar){}
   
   ngOnInit() {}
 
@@ -47,17 +46,7 @@ export class HomeComponent implements OnInit {
   }
 
   onGet(){
-    let obj = this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
-      // this.retrievedData = responseData;
-      console.log("data_get",responseData)
-    });
-    // const dialogRef = this.dialog.open(DialogContent, {
-    //   data : {obj}
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
+    
   }
 
   onPut(){

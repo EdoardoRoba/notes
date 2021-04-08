@@ -29,43 +29,33 @@ export class AppComponent {
   
   ngOnInit() {}
 
-  onPost() {
-    // Send Http request
-    // console.log(this.title)
-    // console.log(this.content)
-    let nota = {title: this.title, content: this.content, expiring: this.expDate}
-    console.log(nota)
-    if ((this.title!="") && (this.content!="") && (this.expDate!="")){
-      this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json',nota).subscribe(responseData => {
-        console.log(responseData);
-      });
-    }
-    this.valid = true
-    this.title = '';
-    this.content = '';
-    this.expDate = '';
-  }
+  // onPost() {
+  //   let nota = {title: this.title, content: this.content, expiring: this.expDate}
+  //   console.log(nota)
+  //   if ((this.title!="") && (this.content!="") && (this.expDate!="")){
+  //     this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json',nota).subscribe(responseData => {
+  //       console.log(responseData);
+  //     });
+  //   }
+  //   this.valid = true
+  //   this.title = '';
+  //   this.content = '';
+  //   this.expDate = '';
+  // }
 
-  onGet(){
-    let obj = this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
-      // this.retrievedData = responseData;
-      console.log("data_get",responseData)
-    });
-    // const dialogRef = this.dialog.open(DialogContent, {
-    //   data : {obj}
-    // });
+  // onGet(){
+  //   let obj = this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
+  //     // this.retrievedData = responseData;
+  //     console.log("data_get",responseData)
+  //   });
+  // }
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
-  }
+  // onPut(){
 
-  onPut(){
+  // }
 
-  }
+  // onDelete(){
 
-  onDelete(){
-
-  }
+  // }
 
 }
