@@ -26,12 +26,14 @@ import { CommonModule } from '@angular/common';
 import { GetOutputComponent } from './get-output/get-output.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GetOutputComponent,
-    HomeComponent
+    HomeComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,

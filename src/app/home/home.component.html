@@ -1,7 +1,7 @@
 <mat-toolbar style="background-color: rgb(0, 0, 223);">
     <mat-icon style="color:white">local_fire_department</mat-icon>
     <span style="color:white">Notes</span>
-  </mat-toolbar>
+</mat-toolbar>
 
   <mat-expansion-panel (opened)="panelOpenState1 = true" (closed)="panelOpenState1 = false" style="margin-top: 2rem;width: 80%;margin-left: auto;margin-right: auto;margin-bottom: 2rem;">
   <mat-expansion-panel-header style="background-color: rgba(7, 189, 7, 0.582)">
@@ -19,6 +19,9 @@
           <input matInput type="text" id="fname" placeholder="insert the key" [(ngModel)]="title">
         </div> -->
 
+        <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Categoria</label>
+        <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci la categoria" [(ngModel)]="category"></textarea>
+          
         <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Titolo</label>
         <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci il titolo" [(ngModel)]="title"></textarea>
 
@@ -53,19 +56,24 @@
       </mat-panel-description>
       </mat-expansion-panel-header>
     
-        <label for="get" style="color: rgba(0, 0, 0, 0.5);margin-top: 2rem;display:inline-block;margin-left: 1rem;">OTTIENI NOTA</label>
+        <label for="get" style="color: rgba(0, 0, 0, 0.5);margin-top: 2rem;display:inline-block;margin-left: 1rem;">OTTIENI NOTA per filtro</label>
         <div id="get">
           <!-- <div>
             <input matInput type="text" id="fname" placeholder="insert the key" [(ngModel)]="title">
           </div> -->
     
+          <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Categoria</label>
+          <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci la categoria" [(ngModel)]="categoryFilter"></textarea>
           <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Titolo</label>
-          <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci il titolo" [(ngModel)]="title"></textarea>
+          <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci il titolo" [(ngModel)]="titleFilter"></textarea>
+          <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Data di scadenza</label>
+          <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci la data di scadenza" [(ngModel)]="dataFilter"></textarea>
           <!-- <div>
             <input matInput type="text" id="fname" placeholder="Insert the value" [(ngModel)]="content">
           </div> -->
     
-          <button style="display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button color="primary"> <a style="color: white;" routerLink="/get-output" routerLinkActive="active">Insert</a></button>  <!-- (click)="onGet()"  -->
+          <!-- <button style="display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button color="primary"> <a style="color: white;" routerLink="/get-output" routerLinkActive="active">Insert</a></button>  (click)="onGet()"  -->
+          <button style="background-color:rgba(0, 0, 255, 0.705);color:white;display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button (click)="openDialog()">Ottieni</button>
         </div>
     
     </mat-expansion-panel>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,10 @@ export class HomeComponent implements OnInit {
   title = '';
   content = '';
   expDate = '';
+  category = '';
+  categoryFilter = '';
+  titleFilter = '';
+  dataFilter = '';
   linkRef : any;
   link : any;
   retrievedData: any;
@@ -22,19 +27,15 @@ export class HomeComponent implements OnInit {
   panelOpenState1 = false;
   panelOpenState2 = false;
   panelOpenState3 = false;
-  notes = this.store.collection('notes').valueChanges({note:'note'});
 
-  constructor(private http: HttpClient,private store: AngularFirestore,private _snackBar: MatSnackBar){}
+  constructor(private http: HttpClient,private store: AngularFirestore,public dialog: MatDialog){}
   
   ngOnInit() {}
 
   onPost() {
-    // Send Http request
-    // console.log(this.title)
-    // console.log(this.content)
-    let nota = {title: this.title, content: this.content, expiring: this.expDate}
+    let nota = {title: this.title, content: this.content, expiring: this.expDate, category: this.category}
     console.log(nota)
-    if ((this.title!="") && (this.content!="") && (this.expDate!="")){
+    if ((this.title!="") && (this.content!="") && (this.expDate!="") && (this.category!="")){
       this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json',nota).subscribe(responseData => {
         console.log(responseData);
       });
@@ -43,6 +44,14 @@ export class HomeComponent implements OnInit {
     this.title = '';
     this.content = '';
     this.expDate = '';
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   onGet(){
