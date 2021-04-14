@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   linkRef : any;
   link : any;
-  retrievedData: any[]=[];
+  retrievedData: any//[]=[];
   valid = false;
   panelOpenState1 = false;
   panelOpenState2 = false;
@@ -60,15 +60,17 @@ export class HomeComponent implements OnInit {
       console.log("utente: ", this.user)
     });
 
+    let retrieved: any[]=[];
     this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
       Object.keys(responseData).forEach(element => {
         if (element===this.user){
-          this.retrievedData.push(responseData[element]);
+          retrieved.push(responseData[element]);
           this.keysData.push(element);
         }
       });
-      console.log("data: ",this.retrievedData)
-      console.log("keys: ",this.keysData)
+      this.retrievedData = retrieved
+      // console.log("data: ",this.retrievedData)
+      // console.log("keys: ",this.keysData)
     });
     // let auth = {user: "001",password: "001"}
     // this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json',auth).subscribe(responseData => {
@@ -94,7 +96,7 @@ export class HomeComponent implements OnInit {
       Object.keys(responseData).forEach(element => {
         this.retrievedData.push(responseData[element]);
         this.keysData.push(element);
-        console.log("newData: ",this.retrievedData)
+        // console.log("newData: ",this.retrievedData)
       });
     });
     }
@@ -103,31 +105,41 @@ export class HomeComponent implements OnInit {
 
   onGet() {
 
-    let tmp = this.retrievedData
+    let dFilter = new Date(this.dataFilter)
+    // let tmp = this.retrievedData
+    let tmp = this.retrievedData[0]
+    let dataToShow: any[]=[]
+    Object.keys(tmp).forEach(element => {
+      let tmptmp = tmp[element]
+      Object.keys(tmp[element]).forEach(el => {
+        dataToShow.push(tmptmp[el])
+      })
+      // this.keys.push(element);
+    });
     //Then, we filter the data by category, title and expiring date (if present)
     if (this.categoryFilter != ""){
-      tmp = tmp.filter(element => {
+      // let tmp = this.retrievedData
+      dataToShow = dataToShow.filter((element:any) => {
         return element.category === this.categoryFilter
       })
     }
-
     if (this.titleFilter != ""){
-      tmp = tmp.filter(element => {
+      dataToShow = dataToShow.filter((element:any) => {
         return element.title === this.titleFilter
       })
     }
-
-    let dFilter = new Date(this.dataFilter)
     if (Date.parse(dFilter.toString())){
-      tmp = tmp.filter(element => {
+      // let tmp = this.retrievedData
+      dataToShow = dataToShow.filter((element:any) => {
         let d = new Date(element.expiring)
         return  d <= dFilter
       })
     }
+    console.log("dataToShow: ",dataToShow)
 
     //Inject the data in the dialog
     const dialogRef = this.dialog.open(DialogComponent,{
-      data: tmp
+      data: dataToShow
     });
 
     dialogRef.afterClosed().subscribe(result => {

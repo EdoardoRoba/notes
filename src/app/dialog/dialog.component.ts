@@ -19,8 +19,20 @@ export class DialogComponent implements OnInit {
 
   // retrievedData : any[]=[]
   panelOpenState = true
+  // keys: String[]=[]
+  dataToShow: any[]=[]
 
-  constructor(private http: HttpClient,@Inject(MAT_DIALOG_DATA) public retrievedData: any) {}
+  constructor(private http: HttpClient,@Inject(MAT_DIALOG_DATA) public retrievedData: any) {
+    // let tmp = this.retrievedData[0]
+    console.log("window: ",retrievedData)
+    // Object.keys(tmp).forEach(element => {
+    //   let tmptmp = tmp[element]
+    //   Object.keys(tmp[element]).forEach(el => {
+    //     this.dataToShow.push(tmptmp[el])
+    //   })
+    //   // this.keys.push(element);
+    // });
+  }
 
   ngOnInit(): void {}
 
