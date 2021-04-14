@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit {
         console.log("posted: ",responseData);
       });
       // this.valid = true;
-      this.title = '';
+      this.title = ''; 
       this.content = '';
       this.expDate = '';
       this.category = '';
