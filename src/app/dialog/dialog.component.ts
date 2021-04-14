@@ -1,5 +1,14 @@
 import { HttpClient } from '@angular/common/http';
+import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData {
+  category: string,
+  title: string,
+  content: string,
+  data: any
+}
 
 @Component({
   selector: 'app-dialog',
@@ -8,17 +17,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogComponent implements OnInit {
 
-  retrievedData : any[]=[]
+  // retrievedData : any[]=[]
+  panelOpenState = true
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,@Inject(MAT_DIALOG_DATA) public retrievedData: any) {}
 
-  ngOnInit(): void {
-    let obj = this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
-      Object.keys(responseData).forEach(element => {
-        this.retrievedData.push(responseData[element]);
-      });
-      console.log("data from get: ",this.retrievedData)
-    });
-  }
+  ngOnInit(): void {}
 
 }

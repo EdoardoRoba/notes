@@ -23,17 +23,16 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { GetOutputComponent } from './get-output/get-output.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GetOutputComponent,
     HomeComponent,
     DialogComponent
   ],
@@ -61,9 +60,14 @@ import { MatTableModule } from '@angular/material/table';
     CommonModule,
     HttpClientInMemoryWebApiModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatSlideToggleModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+// ng s starts the app on localhost
+// npm start starts electron on a new window

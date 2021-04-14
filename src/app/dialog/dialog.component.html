@@ -1,12 +1,38 @@
 
 <mat-dialog-content style="width: 600px;max-width: 800px;height: 500px;">
     <div><h1>Notes</h1></div>
-    <div style="width: 100%;height: 100%;">
-        <mat-list-item *ngFor = "let note of retrievedData">
-            <mat-card style="margin-bottom: 1rem;background-color: rgba(0, 0, 255, 0.329);">
-                <span>{{note.category.toUpperCase()}}</span>
-            </mat-card>
-            <mat-divider></mat-divider>
-        </mat-list-item>
-    </div>
+    <!-- <div style="width: 100%;height: 100%;"> -->
+        <div *ngFor = "let note of retrievedData">
+            <mat-expansion-panel style="background-color: rgba(0, 0, 255, 0.37);margin-bottom: 1rem;">
+                <mat-expansion-panel-header>
+                <!-- <mat-card style="margin-bottom: 1rem;background-color: rgba(0, 0, 255, 0.329);"> -->
+                    {{note.category.toUpperCase()}}
+                <!-- </mat-card> -->
+                </mat-expansion-panel-header>
+                <table style="width: 100%;margin-top: 1rem;margin-bottom: 1rem;">
+                    <tbody>
+                        <tr>
+                            <th style="width: 50%;">Titolo</th>
+                            <th style="width: 50%;">Scadenza</th>
+                        </tr>
+                        <tr>
+                            <td align="center" style="width: 50%;"> {{note.title}} </td>
+                            <td align="center" style="width: 50%;"> {{note.expiring | date}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <mat-card style="margin-left: auto;margin-right: auto;justify-content: center;text-align: center;width: 60%;">{{note.content}}</mat-card>
+                <!-- <div style="margin-top: 1rem;">
+                    Titolo: <span>{{note.title}}</span>
+                </div>
+                <div style="margin-top: 1rem;">
+                    Contenuto: <span>{{note.content}}</span>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <h3>Scadenza:</h3> <span>{{note.expiring | date}}</span>
+                </div> -->
+            <!-- <mat-divider></mat-divider> -->
+            </mat-expansion-panel>
+        </div>
+    <!-- </div> -->
 </mat-dialog-content>
