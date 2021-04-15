@@ -74,9 +74,14 @@ export class LoginComponent implements OnInit {
           this.openSnackBar("Utente non esistente!")
         } else {
           ////////CHECK PASSWORD!!!
-          this.updateUsername()
-          console.log("Welcome back user "+this.username+"!")
-          this.router.navigateByUrl('/notes');
+          if (passwordInput==this.password){
+            this.updateUsername()
+            console.log("Welcome back user "+this.username+"!")
+            this.router.navigateByUrl('/notes');
+          } else {
+            console.log("Incorrect password!")
+            this.openSnackBar("Password errata!")
+          }
         }
     }
   }
