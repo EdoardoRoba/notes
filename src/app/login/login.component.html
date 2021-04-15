@@ -1,0 +1,39 @@
+<mat-card id="card" style="width: 60%;display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;border-color: grey;background-color: rgba(128, 128, 128, 0.15);border-style: solid;border-width: 2px;">
+    <mat-card-content>
+
+        <div style="margin-bottom: 2rem;margin-top: 1rem;">
+            <mat-radio-group [(ngModel)]="signlog">
+                <mat-radio-button class="example-margin" value="signup" style="margin-right: 1rem;">
+                    Iscriviti
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="login">
+                    Accedi
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <br>
+
+        <mat-form-field style="margin-left: auto;margin-right: auto;" appearance="fill">
+            <mat-label>Inserisci username</mat-label>
+            <input matInput [(ngModel)]="username">
+            <button mat-icon-button matSuffix [attr.aria-label]="'User'"><mat-icon>perm_identity</mat-icon></button>
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field style="margin-left: auto;margin-right: auto;" appearance="fill">
+            <mat-label>Inserisci password.</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide"><mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon></button>
+        </mat-form-field>
+
+        <br>
+
+        <button mat-icon-button color="primary" (click)="onChange()" style="margin-bottom: 1rem;">
+            <mat-icon *ngIf="!((password.length>=5) && (username.length>=5) && (signlog.length>0))" style="color: grey;">done_outline</mat-icon>
+            <mat-icon *ngIf="((password.length>=5) && (username.length>=5) && (signlog.length>0))" style="color: green;">done_outline</mat-icon>
+        </button>
+
+    </mat-card-content>
+</mat-card>

@@ -13,11 +13,11 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-notes',
+  templateUrl: './notes.component.html',
+  styleUrls: ['./notes.component.css']
 })
-export class HomeComponent implements OnInit {
+export class NotesComponent implements OnInit {
 
   title = "";
   content = "";
@@ -81,11 +81,16 @@ export class HomeComponent implements OnInit {
   onPost() {
     let nota = {title: this.title, content: this.content, expiring: this.expDate, category: this.category, user: this.user}
     if ((this.title!="") && (this.content!="") && (this.expDate!="") && (this.category!="")){
-      this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.category+'.json',nota).subscribe(responseData => {
-        console.log("posted: ",responseData);
+      this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.category+'.json',nota).subscribe(
+        (responseData) => {
+          console.log("posted: ",responseData);
+          this.valid = true;
+      },
+      (error)=>{
+        console.log("NOT posted!");
+        alert("ERROR! Not posted. Try again.")
       });
-      // this.valid = true;
-      this.title = ''; 
+      this.title = '';
       this.content = '';
       this.expDate = '';
       this.category = '';
@@ -99,6 +104,9 @@ export class HomeComponent implements OnInit {
         // console.log("newData: ",this.retrievedData)
       });
     });
+    setTimeout(()=>{
+        this.valid = false;
+    }, 3000);
     }
     // this.valid = false;
   }
@@ -158,17 +166,25 @@ export class HomeComponent implements OnInit {
     // console.log("notes: ",this.retrievedData[0])
     // let toDeleteKeys: String[]=[]
     // let tmpDel = this.retrievedData
+    let dDel = new Date(this.dataFilter)
 
-    if (this.categoryDel != ""){
-      for (var i=0;i<this.retrievedData.length;i++){
-        if(this.retrievedData[i].category == this.categoryDel){
-          let kd = this.keysData[i]
-          this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+kd+'.json').subscribe((response) => {
-            console.log("Note ",kd," is deleted!")
-          });
-        }
-      }
+    if (this.categoryDel != "" && this.titleDel === "" && !Date.parse(dDel.toString())){
+      let tmpC = this.categoryDel
+      this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.categoryDel+'.json').subscribe((response) => {
+          console.log("Note with category ",tmpC," is deleted!")
+        });
     }
+
+    // if (this.categoryDel != ""){
+    //   for (var i=0;i<this.retrievedData.length;i++){
+    //     if(this.retrievedData[i].category == this.categoryDel){
+    //       let kd = this.keysData[i]
+    //       this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+kd+'.json').subscribe((response) => {
+    //         console.log("Note ",kd," is deleted!")
+    //       });
+    //     }
+    //   }
+    // }
     this.categoryDel = ""
 
     if (this.deleteAll==true){

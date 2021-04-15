@@ -23,18 +23,21 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home/home.component';
+import { NotesComponent } from './notes/notes.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { LoginComponent } from './login/login.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    DialogComponent
+    NotesComponent,
+    DialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     HttpClientInMemoryWebApiModule,
     MatListModule,
     MatTableModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatRadioModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
