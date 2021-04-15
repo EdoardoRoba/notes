@@ -19,7 +19,8 @@ export class LoginComponent implements OnInit {
   signlog = "";
   password = "";
   username = "";
-  obj: any[]=[];
+  users: String[]=[];
+  objs: any[]=[]
 
   ngOnInit(): void {
   //   let auth = {user: "001",password: "001",id:this.txt}
@@ -28,21 +29,28 @@ export class LoginComponent implements OnInit {
   //     });
     this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json').subscribe((responseData:any) => {
       Object.keys(responseData).forEach(element => {
-        this.obj.push(responseData[element].user);
+        this.users.push(responseData[element].user);
+        this.objs.push(responseData[element]);
       });
-      console.log("obj: ",this.obj);
+      // console.log("obj: ",this.objs);
     });
   }
 
   onConfirm(){
     let txt = uuidv4();
     let userExists = []
+    let objExists: any[]=[]
+    let passwordInput: string=""
     // console.log("u ",this.username)
     // console.log("p ",this.password)
 
-    userExists = this.obj.filter(el => {
+    userExists = this.users.filter(el => {
       return el == this.username
     })
+    objExists = this.objs.filter(el => {
+      return el.user == this.username
+    })
+    passwordInput = objExists[0].password
     // console.log("users: ",userExists)
     if(this.signlog=="signup"){
       if (userExists.length==0) {
@@ -65,6 +73,7 @@ export class LoginComponent implements OnInit {
           console.log("User does not exist!")
           this.openSnackBar("Utente non esistente!")
         } else {
+          ////////CHECK PASSWORD!!!
           this.updateUsername()
           console.log("Welcome back user "+this.username+"!")
           this.router.navigateByUrl('/notes');
