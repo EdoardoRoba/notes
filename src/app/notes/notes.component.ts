@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ThemePalette } from '@angular/material/core';
+import { CommunicationService } from '../communication.service';
 
 export interface DialogData {
   category: string,
@@ -23,6 +24,8 @@ export class NotesComponent implements OnInit {
   content = "";
   expDate = "";
   category = "";
+
+  // usr = "";
 
   categoryFilter = "";
   titleFilter = "";
@@ -45,30 +48,37 @@ export class NotesComponent implements OnInit {
   deleteAll = false
   color: ThemePalette = 'accent';
 
-  constructor(private http: HttpClient,private store: AngularFirestore,public dialog: MatDialog){}
+  constructor(private http: HttpClient, private store: AngularFirestore, public dialog: MatDialog, private data: CommunicationService){}
   
   ngOnInit() {
-    this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json').subscribe((responseData:any) => {
-      let obj: any[]=[];
-      Object.keys(responseData).forEach(element => {
-        obj.push(responseData[element]);
-      });
-      let utenteObj = obj.filter((element:any) => {
-        return element.user === "a000" //to be dynamic with user
-      })
-      this.user = utenteObj[0].user
-      console.log("utente: ", this.user)
-    });
+
+    this.data.currentMessage.subscribe(message => this.user = message)
+    console.log("USR: ",this.user)
+    //TO COMMENT:
+    // this.user = "00001"
+
+    // this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json').subscribe((responseData:any) => {
+    //   let obj: any[]=[];
+    //   Object.keys(responseData).forEach(element => {
+    //     obj.push(responseData[element]);
+    //   });
+    //   // let utenteObj = obj.filter((element:any) => {
+    //   //   return element.user === this.user //to be dynamic with user
+    //   // })
+    //   // this.user = utenteObj[0].user
+    // });
 
     let retrieved: any[]=[];
     this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
       Object.keys(responseData).forEach(element => {
+        console.log("element"+element)
         if (element===this.user){
           retrieved.push(responseData[element]);
           this.keysData.push(element);
         }
       });
       this.retrievedData = retrieved
+      console.log("data: ",this.retrievedData)
       // console.log("data: ",this.retrievedData)
       // console.log("keys: ",this.keysData)
     });
@@ -99,8 +109,10 @@ export class NotesComponent implements OnInit {
       this.keysData = []
       this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
       Object.keys(responseData).forEach(element => {
-        this.retrievedData.push(responseData[element]);
-        this.keysData.push(element);
+        if (element===this.user){
+          this.retrievedData.push(responseData[element]);
+          this.keysData.push(element);
+        }
         // console.log("newData: ",this.retrievedData)
       });
     });
@@ -113,47 +125,48 @@ export class NotesComponent implements OnInit {
 
   onGet() {
 
-    let dFilter = new Date(this.dataFilter)
-    // let tmp = this.retrievedData
-    let tmp = this.retrievedData[0]
-    let dataToShow: any[]=[]
-    Object.keys(tmp).forEach(element => {
-      let tmptmp = tmp[element]
-      Object.keys(tmp[element]).forEach(el => {
-        dataToShow.push(tmptmp[el])
-      })
-      // this.keys.push(element);
-    });
-    //Then, we filter the data by category, title and expiring date (if present)
-    if (this.categoryFilter != ""){
+    if (this.retrievedData.length>0){
+      let dFilter = new Date(this.dataFilter)
       // let tmp = this.retrievedData
-      dataToShow = dataToShow.filter((element:any) => {
-        return element.category === this.categoryFilter
-      })
-    }
-    if (this.titleFilter != ""){
-      dataToShow = dataToShow.filter((element:any) => {
-        return element.title === this.titleFilter
-      })
-    }
-    if (Date.parse(dFilter.toString())){
-      // let tmp = this.retrievedData
-      dataToShow = dataToShow.filter((element:any) => {
-        let d = new Date(element.expiring)
-        return  d <= dFilter
-      })
-    }
-    console.log("dataToShow: ",dataToShow)
+      let tmp = this.retrievedData[0]
+      let dataToShow: any[]=[]
+      Object.keys(tmp).forEach(element => {
+        let tmptmp = tmp[element]
+        Object.keys(tmp[element]).forEach(el => {
+          dataToShow.push(tmptmp[el])
+        })
+        // this.keys.push(element);
+      });
+      //Then, we filter the data by category, title and expiring date (if present)
+      if (this.categoryFilter != ""){
+        // let tmp = this.retrievedData
+        dataToShow = dataToShow.filter((element:any) => {
+          return element.category === this.categoryFilter
+        })
+      }
+      if (this.titleFilter != ""){
+        dataToShow = dataToShow.filter((element:any) => {
+          return element.title === this.titleFilter
+        })
+      }
+      if (Date.parse(dFilter.toString())){
+        // let tmp = this.retrievedData
+        dataToShow = dataToShow.filter((element:any) => {
+          let d = new Date(element.expiring)
+          return  d <= dFilter
+        })
+      }
+      console.log("dataToShow: ",dataToShow)
 
-    //Inject the data in the dialog
-    const dialogRef = this.dialog.open(DialogComponent,{
-      data: dataToShow
-    });
+      //Inject the data in the dialog
+      const dialogRef = this.dialog.open(DialogComponent,{
+        data: dataToShow
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      // this.retrievedData = []
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+        // this.retrievedData = []
+      });}
 
   }
 
