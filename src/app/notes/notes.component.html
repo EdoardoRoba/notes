@@ -118,12 +118,14 @@
     
           <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Categoria</label>
           <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci la categoria" [(ngModel)]="categoryDel"></textarea>
+          
           <label style="display: flex;justify-content: center;text-align: center;margin-top: 1rem;">Titolo</label>
-          <textarea style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci il titolo" [(ngModel)]="titleDel"></textarea>
+          <textarea [disabled]="categoryDel.length==0" style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 30px;width:30%" placeholder="Inserisci il titolo" [(ngModel)]="titleDel"></textarea>
+          
           <mat-form-field style="display: block;margin-left: auto;margin-right: auto;margin-top: 1rem;height: 50px;width: 50%;" appearance="fill">
             <mat-label>Le note prima di questa data verranno eliminate</mat-label>
-            <input matInput [matDatepicker]="picker3" [(ngModel)]="dataDel">
-            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <input [disabled]="categoryDel.length==0" matInput [matDatepicker]="picker3" [(ngModel)]="dataDel">
+            <mat-datepicker-toggle [disabled]="categoryDel.length==0" matSuffix [for]="picker3"></mat-datepicker-toggle>
             <mat-datepicker #picker3></mat-datepicker>
           </mat-form-field>
           <!-- <div>
@@ -141,7 +143,8 @@
             </mat-slide-toggle>
           </section>
 
-          <button style="display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button (click)="onDelete()" color="primary">Insert</button>
+          <button *ngIf="!isDeleted" style="display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button (click)="onDelete()" color="primary">Insert</button>
+          <button *ngIf="isDeleted" style="background-color: red;color: white;display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 2rem;width:20%;margin-bottom: 1rem" mat-raised-button (click)="onDelete()">Insert</button>
 
         </div>
     

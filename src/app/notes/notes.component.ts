@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ThemePalette } from '@angular/material/core';
 import { CommunicationService } from '../communication.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface DialogData {
   category: string,
@@ -47,8 +48,11 @@ export class NotesComponent implements OnInit {
 
   deleteAll = false
   color: ThemePalette = 'accent';
+  isDeleted = false;
 
-  constructor(private http: HttpClient, private store: AngularFirestore, public dialog: MatDialog, private data: CommunicationService){}
+  categories: any[]=[]
+
+  constructor(private http: HttpClient, private store: AngularFirestore, public dialog: MatDialog, private data: CommunicationService, private _snackBar: MatSnackBar){}
   
   ngOnInit() {
 
@@ -57,35 +61,21 @@ export class NotesComponent implements OnInit {
     //TO COMMENT:
     // this.user = "00001"
 
-    // this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json').subscribe((responseData:any) => {
-    //   let obj: any[]=[];
-    //   Object.keys(responseData).forEach(element => {
-    //     obj.push(responseData[element]);
-    //   });
-    //   // let utenteObj = obj.filter((element:any) => {
-    //   //   return element.user === this.user //to be dynamic with user
-    //   // })
-    //   // this.user = utenteObj[0].user
-    // });
-
     let retrieved: any[]=[];
     this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
       Object.keys(responseData).forEach(element => {
-        console.log("element"+element)
         if (element===this.user){
           retrieved.push(responseData[element]);
           this.keysData.push(element);
         }
       });
       this.retrievedData = retrieved
-      console.log("data: ",this.retrievedData)
       // console.log("data: ",this.retrievedData)
-      // console.log("keys: ",this.keysData)
+      Object.keys(this.retrievedData).forEach(element => {
+        this.categories = (Object.keys(this.retrievedData[element]))
+      });
+      
     });
-    // let auth = {user: "001",password: "001"}
-    // this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/auths.json',auth).subscribe(responseData => {
-    //     console.log(responseData);
-    //   });
   }
 
   onPost() {
@@ -108,17 +98,20 @@ export class NotesComponent implements OnInit {
       this.retrievedData = []
       this.keysData = []
       this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
-      Object.keys(responseData).forEach(element => {
-        if (element===this.user){
-          this.retrievedData.push(responseData[element]);
-          this.keysData.push(element);
-        }
-        // console.log("newData: ",this.retrievedData)
+        Object.keys(responseData).forEach(element => {
+          if (element===this.user){
+            this.retrievedData.push(responseData[element]);
+            this.keysData.push(element);
+          }
+          // console.log("newData: ",this.retrievedData)
+        });
       });
-    });
-    setTimeout(()=>{
-        this.valid = false;
-    }, 3000);
+      Object.keys(this.retrievedData).forEach(element => {
+        this.categories = (Object.keys(this.retrievedData[element]))
+      });
+      setTimeout(()=>{
+          this.valid = false;
+      }, 3000);
     }
     // this.valid = false;
   }
@@ -156,7 +149,6 @@ export class NotesComponent implements OnInit {
           return  d <= dFilter
         })
       }
-      console.log("dataToShow: ",dataToShow)
 
       //Inject the data in the dialog
       const dialogRef = this.dialog.open(DialogComponent,{
@@ -182,10 +174,19 @@ export class NotesComponent implements OnInit {
     let dDel = new Date(this.dataFilter)
 
     if (this.categoryDel != "" && this.titleDel === "" && !Date.parse(dDel.toString())){
-      let tmpC = this.categoryDel
-      this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.categoryDel+'.json').subscribe((response) => {
-          console.log("Note with category ",tmpC," is deleted!")
-        });
+      if (this.categories.includes(this.categoryDel)){
+        let tmpC = this.categoryDel
+        this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.categoryDel+'.json').subscribe((response) => {
+            console.log("Note with category ",tmpC," is deleted!")
+            this.openSnackBar("Note with category "+tmpC+" is deleted!")
+            this.isDeleted = true
+          },
+          (error)=>{
+            console.log("Category "+this.categoryDel+" does not exist. Error: "+error)
+          });
+        } else {
+          this.openSnackBar("Note with category "+this.categoryDel+" does not exist!")
+        }
     }
 
     // if (this.categoryDel != ""){
@@ -203,9 +204,20 @@ export class NotesComponent implements OnInit {
     if (this.deleteAll==true){
       this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((response) => {
         console.log("Everything is deleted!")
+        this.openSnackBar("Everything is deleted!")
+        this.isDeleted = true
       });
     }
+    setTimeout(()=>{
+      this.isDeleted = false;
+    }, 3000);
     this.deleteAll = false
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "", {
+      duration: 2000
+    });
   }
 
 }

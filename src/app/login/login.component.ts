@@ -47,10 +47,6 @@ export class LoginComponent implements OnInit {
     userExists = this.users.filter(el => {
       return el == this.username
     })
-    objExists = this.objs.filter(el => {
-      return el.user == this.username
-    })
-    passwordInput = objExists[0].password
     // console.log("users: ",userExists)
     if(this.signlog=="signup"){
       if (userExists.length==0) {
@@ -73,7 +69,11 @@ export class LoginComponent implements OnInit {
           console.log("User does not exist!")
           this.openSnackBar("Utente non esistente!")
         } else {
-          ////////CHECK PASSWORD!!!
+          objExists = this.objs.filter(el => {
+            return el.user == this.username
+          })
+          console.log("objexists: "+objExists)
+          passwordInput = objExists[0].password
           if (passwordInput==this.password){
             this.updateUsername()
             console.log("Welcome back user "+this.username+"!")
