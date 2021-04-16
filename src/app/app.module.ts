@@ -31,6 +31,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LoginComponent } from './login/login.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatListModule,
     MatTableModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    IonicModule.forRoot()
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]

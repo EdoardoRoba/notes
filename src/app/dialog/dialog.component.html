@@ -23,6 +23,10 @@
                         </tbody>
                     </table>
                     <mat-card style="margin-left: auto;margin-right: auto;justify-content: center;text-align: center;width: 60%;">{{note.content}}</mat-card>
+
+                    <button style="display: flex;justify-content: center;text-align: center;margin-left: auto;margin-right: auto;margin-top: 1rem;" mat-icon-button (click)="deleteNote(note)" color="accent" aria-label="Example icon button with a menu icon">
+                        <mat-icon>delete</mat-icon>
+                      </button>
                     <!-- <div style="margin-top: 1rem;">
                         Titolo: <span>{{note.title}}</span>
                     </div>

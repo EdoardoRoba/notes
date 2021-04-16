@@ -45,7 +45,7 @@ export class NotesComponent implements OnInit {
   panelOpenState3 = false;
   keysData: String[]=[];
   user : any;
-
+  id = ""
   deleteAll = false
   color: ThemePalette = 'accent';
   isDeleted = false;
@@ -70,26 +70,46 @@ export class NotesComponent implements OnInit {
         }
       });
       this.retrievedData = retrieved
-      // console.log("data: ",this.retrievedData)
+      console.log("data: ",this.retrievedData)
       Object.keys(this.retrievedData).forEach(element => {
         this.categories = (Object.keys(this.retrievedData[element]))
       });
       
     });
+
   }
 
   onPost() {
+    let tmpCategory = this.category
+    let tmpTitle = this.title
+    let tmpDate = this.expDate
+    let tmpContent = this.content
+    let tmpUser = this.user
+
     let nota = {title: this.title, content: this.content, expiring: this.expDate, category: this.category, user: this.user}
     if ((this.title!="") && (this.content!="") && (this.expDate!="") && (this.category!="")){
       this.http.post('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.category+'.json',nota).subscribe(
         (responseData) => {
           console.log("posted: ",responseData);
+          let tmpp: any = responseData
+          this.id = tmpp.name
           this.valid = true;
+          // console.log('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.category+'/'+this.id+'.json')
+          let nota_new = {title: tmpTitle, content: tmpContent, expiring: tmpDate, category: tmpCategory, user: tmpUser, id: this.id}
+          this.http.put('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+tmpUser+'/'+tmpCategory+'/'+this.id+'.json',nota_new).subscribe((response) => {
+            console.log("id added: ",response)
+          })
       },
       (error)=>{
         console.log("NOT posted!");
         alert("ERROR! Not posted. Try again.")
       });
+      // console.log("id: ", this.id)
+      // let nota_new = {title: this.title, content: this.content, expiring: this.expDate, category: this.category, user: this.user, id: this.id}
+      // this.http.put('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.category+'/'+this.id+'.json',nota_new).subscribe((response) => {
+      //   console.log("id added: ",response)
+      // })
+
       this.title = '';
       this.content = '';
       this.expDate = '';
@@ -117,48 +137,57 @@ export class NotesComponent implements OnInit {
   }
 
   onGet() {
-
-    if (this.retrievedData.length>0){
-      let dFilter = new Date(this.dataFilter)
-      // let tmp = this.retrievedData
-      let tmp = this.retrievedData[0]
-      let dataToShow: any[]=[]
-      Object.keys(tmp).forEach(element => {
-        let tmptmp = tmp[element]
-        Object.keys(tmp[element]).forEach(el => {
-          dataToShow.push(tmptmp[el])
-        })
-        // this.keys.push(element);
-      });
-      //Then, we filter the data by category, title and expiring date (if present)
-      if (this.categoryFilter != ""){
+    this.retrievedData = []
+    this.http.get('https://notes-c66a1-default-rtdb.firebaseio.com/notes.json').subscribe((responseData:any) => {
+      Object.keys(responseData).forEach(element => {
+        if (element===this.user){
+          this.retrievedData.push(responseData[element]);
+        }
+      })
+      if (this.retrievedData.length>0){
+        let dFilter = new Date(this.dataFilter)
         // let tmp = this.retrievedData
-        dataToShow = dataToShow.filter((element:any) => {
-          return element.category === this.categoryFilter
-        })
-      }
-      if (this.titleFilter != ""){
-        dataToShow = dataToShow.filter((element:any) => {
-          return element.title === this.titleFilter
-        })
-      }
-      if (Date.parse(dFilter.toString())){
-        // let tmp = this.retrievedData
-        dataToShow = dataToShow.filter((element:any) => {
-          let d = new Date(element.expiring)
-          return  d <= dFilter
-        })
+        let tmp = this.retrievedData[0]
+        let dataToShow: any[]=[]
+        Object.keys(tmp).forEach(element => {
+          let tmptmp = tmp[element]
+          Object.keys(tmp[element]).forEach(el => {
+            dataToShow.push(tmptmp[el])
+          })
+          // this.keys.push(element);
+        });
+        //Then, we filter the data by category, title and expiring date (if present)
+        if (this.categoryFilter != ""){
+          // let tmp = this.retrievedData
+          dataToShow = dataToShow.filter((element:any) => {
+            return element.category === this.categoryFilter
+          })
+        }
+        if (this.titleFilter != ""){
+          dataToShow = dataToShow.filter((element:any) => {
+            return element.title === this.titleFilter
+          })
+        }
+        if (Date.parse(dFilter.toString())){
+          // let tmp = this.retrievedData
+          dataToShow = dataToShow.filter((element:any) => {
+            let d = new Date(element.expiring)
+            return  d <= dFilter
+          })
+        }
+  
+        //Inject the data in the dialog
+        const dialogRef = this.dialog.open(DialogComponent,{
+          data: dataToShow
+        });
+  
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(`Dialog result: ${result}`);
+          // this.retrievedData = []
+        });
       }
 
-      //Inject the data in the dialog
-      const dialogRef = this.dialog.open(DialogComponent,{
-        data: dataToShow
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-        // this.retrievedData = []
-      });}
+    })
 
   }
 
@@ -173,17 +202,21 @@ export class NotesComponent implements OnInit {
     // let tmpDel = this.retrievedData
     let dDel = new Date(this.dataFilter)
 
-    if (this.categoryDel != "" && this.titleDel === "" && !Date.parse(dDel.toString())){
+    if (this.categoryDel != ""){
       if (this.categories.includes(this.categoryDel)){
         let tmpC = this.categoryDel
-        this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.categoryDel+'.json').subscribe((response) => {
-            console.log("Note with category ",tmpC," is deleted!")
-            this.openSnackBar("Note with category "+tmpC+" is deleted!")
-            this.isDeleted = true
-          },
-          (error)=>{
-            console.log("Category "+this.categoryDel+" does not exist. Error: "+error)
-          });
+        if (this.titleDel === "" && !Date.parse(dDel.toString())){
+          this.http.delete('https://notes-c66a1-default-rtdb.firebaseio.com/notes/'+this.user+'/'+this.categoryDel+'.json').subscribe((response) => {
+              console.log("Note with category ",tmpC," is deleted!")
+              this.openSnackBar("Note with category "+tmpC+" is deleted!")
+              this.isDeleted = true
+            },
+            (error)=>{
+              console.log("Category "+this.categoryDel+" does not exist. Error: "+error)
+            });
+          } else if (this.titleDel != "" && !Date.parse(dDel.toString())){
+
+          }
         } else {
           this.openSnackBar("Note with category "+this.categoryDel+" does not exist!")
         }

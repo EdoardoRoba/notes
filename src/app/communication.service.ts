@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs'
 })
 export class CommunicationService {
 
-  private messageSource = new BehaviorSubject<string>("default message");
+  private messageSource = new BehaviorSubject<string>("default");
   currentMessage = this.messageSource.asObservable();
 
   constructor() { }
